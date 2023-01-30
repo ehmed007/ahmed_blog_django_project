@@ -166,10 +166,3 @@ webencodings==0.5.1
 websocket-client==1.4.2
 Werkzeug==2.2.2
 whitenoise==6.3.0
-widgetsnbextension==4.0.4
-wrapt==1.14.1
-xdg==5
-xgboost==1.7.2
-xkit==0.0.0
-yarg==0.1.9
-zipp==1.0.0
