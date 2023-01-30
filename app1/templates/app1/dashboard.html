@@ -1,0 +1,51 @@
+{% extends "app1/base.html" %}
+{% load static %}
+
+
+
+{% block content %}
+
+    <div class="col-sm-10 container">
+        <h1 class="text-white my-3">Dashboard</h1>
+        <h3 class="alert alert-warning my-3">Username : {{username|upper}}</h3>
+        <br>
+
+        <a href="{% url 'addpost' %}" class="btn btn-success">Add POST</a>
+        <h3 class="text-center alert alert-warning mt-4">Show Post Information</h3>
+        {% if data %}
+          <table class="table table-hover bg-white table-dark">
+            <thead>
+                <tr class="text-center">
+                    <!-- <th class="col" style="width:4%">ID</th> -->
+                    <th class="col" style="width:28%">Title</th>
+                    <th class="col" style="width:55%">Description</th>
+                    <th class="col" style="width:55%">Owner</th>
+                    <th class="col" style="width:15%">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in data %}
+                    <tr>
+                        <!-- <th scope="row">{{i.id}}</th> -->
+                        <td>{{i.title}}</td>
+                        <td>{{i.description}}</td>
+                        <td><b>{{i.usernamee|upper}}</b></td>
+                        <td class="text-center">
+                            <a href="{% url 'updatepost' i.id %}" class="btn btn-warning btn-sm m-1">Update</a>
+                            <form action="{% url 'deletepost' i.id %}" class="d-inline" method="post">
+                                {% csrf_token %}
+                                {% if perms.app1.delete_blogs %}
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                {% endif %}
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}        
+            </tbody>
+          </table>
+        {% else %}
+          <h3>You have not posted any post!</h3>
+        {% endif %}
+    </div>
+
+{% endblock content %}
