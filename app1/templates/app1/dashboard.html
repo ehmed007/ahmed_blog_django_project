@@ -8,6 +8,8 @@
     <div class="col-sm-10 container">
         <h1 class="text-white my-3">Dashboard</h1>
         <h3 class="alert alert-warning my-3">Username : {{username|upper}}</h3>
+        <h4 class="alert alert-warning my-3">IP Address : {{ip}}</h4>
+        <h4 class="alert alert-warning my-3">user Login count : {{ct}}</h4>
         <br>
 
         <a href="{% url 'addpost' %}" class="btn btn-success">Add POST</a>
@@ -46,6 +48,25 @@
         {% else %}
           <h3>You have not posted any post!</h3>
         {% endif %}
+        <div class="d-flex justify-content-end">
+            <span>
+                
+                {% if data.has_previous %}
+                <a class="btn btn-primary" href="?page={{data.previous_page_number}}">Previous</a>
+                {% endif %}
+                
+                <span> {{data.number}} </span>
+                
+                {% if data.has_next %}
+                    <a class="btn btn-primary" href="?page={{data.next_page_number}}">Next</a>
+                {% endif %}
+                
+            </span>
+        </div>
+        <br>
+        <br>
+        <br>
     </div>
+    
 
 {% endblock content %}

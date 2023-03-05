@@ -16,5 +16,23 @@
             <br>
         {% endfor %}
 
+        <div class="d-flex justify-content-end" >
+            <span>
+                {% if data.has_previous %}
+                    <a class="btn btn-primary" href="?page={{data.previous_page_number}}">Previous</a>
+                {% endif %}
+    
+                <span> {{data.number}} </span>
+    
+                {% if data.has_next %}
+                    <a class="btn btn-primary" href="?page={{data.next_page_number}}">Next</a>
+                {% endif %}
+            </span>
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
     </div>
 {% endblock content %}

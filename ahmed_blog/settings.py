@@ -124,3 +124,10 @@ STATIC_ROOT = BASE_DIR / 'app1/static/'
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # SESSION_COOKIE_AGE = 10
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'my_cache_table',
+    }
+}

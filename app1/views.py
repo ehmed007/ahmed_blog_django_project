@@ -6,13 +6,19 @@ from django.contrib.auth import authenticate, login as do_login, logout as do_lo
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import Group
 from django.contrib import messages
+from django.core.cache import cache
+from django.core.paginator import Paginator
+
 # Create your views here.
 
 def home(request):
-    data = blogs.objects.all()
-    return render(request, 'app1/home.html',{'data':data})
+    data = blogs.objects.all().order_by('id')   
+    page_data = Paginator(data, 3, orphans=1)
+    pg_number = request.GET.get('page')
+    page_obj = page_data.get_page(pg_number)
+    return render(request, 'app1/home.html',{'data':page_obj})
     
-def about(request):
+def about(request): 
     return render(request, 'app1/about.html')
     
 def contact(request):
@@ -31,6 +37,13 @@ def dashboard(request):
     if request.user.is_authenticated:
         user = request.user
         user_name = user.get_user_name()
+
+        ip = request.session.get('ip',0)
+        ct = cache.get('count', version=user.pk)
+        # if ct >= 4:
+            # do_logout(request)
+            # return HttpResponseRedirect('/login/')
+
         if user_name != 'admin':
             data = blogs.objects.filter(usernamee=user_name)
         else:
@@ -38,8 +51,14 @@ def dashboard(request):
         if request.method == 'POST':
             fm = blogs_form(request.POST)
             fm.save()
+        
+        # data = blogs.objects.all().order_by('id')
+        page_data = Paginator(data, 3)
+        pg_number = request.GET.get('page')
+        page_obj = page_data.get_page(pg_number)
+
         fm = blogs_form()
-        return render(request, 'app1/dashboard.html',{'form':fm,'data':data,'username':user_name})
+        return render(request, 'app1/dashboard.html',{'form':fm,'data':page_obj,'username':user_name,'ip':ip,'ct':ct})
     else:
         return HttpResponseRedirect('/login/')
 
@@ -104,7 +123,7 @@ def add_post(request):
         return render(request, 'app1/addpost.html',{'form':fm})
     else:
         return HttpResponseRedirect('/login/')
- 
+
 
 def update_post(request, id):
     if request.user.is_authenticated:
